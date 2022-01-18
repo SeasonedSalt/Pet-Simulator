@@ -29,15 +29,18 @@ def printMenu(menuOptions):
   for key in optionKeys:
       print(key + ":\t" + menuOptions[key]["text"])
 
+def playToys():
+    print(pet["name"] + " had a great playtime with their toys!")
+
 def quitSimulator():
     print("Quit the simulator. Thanks for playing!")
 
 def feedPet():
-    pet["hunger"] -= 10
+    pet["hunger"] -= 20
     print("Fed your pet! Hunger decreased by 10")
 
 def printStats():
-    print("Your " + pet["type"] + pet["name"] + "is doing great!")
+    print("Your " + pet["type"] + " " + pet["name"] + "is doing great!")
     print("Your pet currently has: " + str(len(pet["toys"])))
     for toy in pet["toys"]:
         print(toy)
@@ -51,7 +54,8 @@ def main():
   initPet()
   
   menuOptions = {"Q": { "funciton": quitSimulator, "text": "Quit the game"}, 
-  "F": { "funciton": feedPet, "text": "Feed " + pet["name"] } }
+  "F": { "funciton": feedPet, "text": "Feed " + pet["name"] },
+  "P": { "funciton": playToys, "text": "Play with " + pet["name"]  }
   
   keepPlaying = True
   while keepPlaying:
@@ -67,6 +71,8 @@ def main():
       
       pet["hunger"] += 10
       pet["age"] += 1
+
+      printStats()
       print()
 
 
