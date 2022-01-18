@@ -8,7 +8,7 @@ def initPet():
     petType = ""
 
     petOptions = list(petToys.keys())
-    print(petOptions)
+  
 
     while petType not in petOptions:
         print("Please input a type of pet from the following options: ")
@@ -32,48 +32,66 @@ def printMenu(menuOptions):
 def playToys():
     print(pet["name"] + " had a great playtime with their toys!")
 
+def getToys():
+    print("Let's get new toys!")
+    toyOptions = petToys[pet["type"]]
+    
+    toyNum = -1
+    while toyNum < 0 or toyNum > len(toyOptions) - 1:
+      for i in range(len(toyOptions)):
+          print(str(i) + ": " + toyOptions[i])
+      toyNum = int(input("Input the number of the toy you would like: "))
+
+    chosenToy = toyOptions[toyNum]
+    pet["toys"].append(chosenToy)
+    print("You selected the " + chosenToy + "!")
+
 def quitSimulator():
     print("Quit the simulator. Thanks for playing!")
 
 def feedPet():
-    pet["hunger"] -= 20
+    newHunger = pet["hunger"] - 20
+    if newHunger < 0:
+        newHunger = 0
+    pet["hunger"] = newHunger
     print("Fed your pet! Hunger decreased by 10")
 
 def printStats():
-    print("Your " + pet["type"] + " " + pet["name"] + "is doing great!")
-    print("Your pet currently has: " + str(len(pet["toys"])))
+    print("Your " + pet["type"] + " " + pet["name"] + " is doing great!")
+    print("Your pet currently has: " + str(len(pet["toys"])) + " toys, which are: ")
     for toy in pet["toys"]:
         print(toy)
-    print("Your pet is currently at hunger of " + str(pet["hunger"]) + "of a max of 100")
-    print("Your pet is currently at the age of " + str(pet["age"]) + "days old")
+    print("Your pet is currently at hunger of " + str(pet["hunger"]) + " of a max of 100")
+    print("Your pet is currently at the age of " + str(pet["age"]) + " days old")
 
-initPet()
+menuOptions = {"Q": { "function": quitSimulator, "text": "Quit the game"}, 
+  "F": { "function": feedPet, "text": "Feed " + pet["name"] },
+  "P": { "function": playToys, "text": "Play with " + pet["name"]  },
+  "G": { "function": getToys, "text": "Get new toys for " + pet["name"] + "" }}
 
 def main():
   
   initPet()
   
-  menuOptions = {"Q": { "funciton": quitSimulator, "text": "Quit the game"}, 
-  "F": { "funciton": feedPet, "text": "Feed " + pet["name"] },
-  "P": { "funciton": playToys, "text": "Play with " + pet["name"]  }
+      
+  pet["hunger"] += 10
+  pet["age"] += 1
+
+  printStats()
   
+def looper():
   keepPlaying = True
-  while keepPlaying:
+  while True:
+      main()
       menuSelection = ""
       while menuSelection not in menuOptions.keys():
           printMenu(menuOptions)
           menuSelection = input("Which of these menu options would you like to use? ").upper()
+        
+          menuOptions[menuSelection]["function"]()
 
-      if menuSelection == "Q":
+      if menuSelection == "Q".upper():
           keepPlaying = False
-  
-      menuOptions[menuSelection]["function"]()
-      
-      pet["hunger"] += 10
-      pet["age"] += 1
-
-      printStats()
-      print()
 
 
-main()
+looper()
